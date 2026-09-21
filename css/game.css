@@ -37,7 +37,23 @@
   gap: 16px;
 }
 
-.arena-logo {
+.arena-logo-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.arena-logo-img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  border-radius: 4px;
+  background: #ffffff;
+  border: 1.5px solid #000;
+  box-shadow: 2px 2px 0px #000;
+}
+
+.arena-logo-text {
   font-size: 1.6rem;
   font-weight: 900;
   letter-spacing: -0.05em;
