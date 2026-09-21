@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NULL — Just One More Round</title>
+  
+  <meta name="description" content="NULL is a neo-brutalist card game inspired by Uno. 108 cards, 4 colours, same players, same chaos.">
+  <meta property="og:title" content="NULL — Just One More Round">
+  <meta property="og:description" content="Dump your pointers to zero. Neo-brutalist Uno-inspired card game.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://0xsharon.github.io/null/">
+  
+  <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg">
+  
+  <!-- Google Fonts: Space Grotesk & Space Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="./css/brutalism.css">
+  <link rel="stylesheet" href="./css/game.css">
+</head>
+<body>
+
+  <!-- Main Neo-Brutalist Frame -->
+  <div class="app-container">
+
+    <!-- ==================== LEFT SIDEBAR ==================== -->
+    <aside class="sidebar-left">
+      <div>
+        <div class="brand-block">
+          <h1 class="brand-logo-text">NULL</h1>
+          <p class="brand-tagline">JUST ONE MORE ROUND.</p>
+        </div>
+
+        <nav>
+          <ul class="nav-menu">
+            <li class="nav-item"><a href="#" class="nav-link active" data-action="home">HOME</a></li>
+            <li class="nav-item"><a href="#" class="nav-link" data-action="play">PLAY</a></li>
+            <li class="nav-item"><a href="#" class="nav-link" data-action="cards">CARDS</a></li>
+            <li class="nav-item"><a href="#" class="nav-link" data-action="rules">RULES</a></li>
+            <li class="nav-item"><a href="#" class="nav-link" data-action="leaderboard">LEADERBOARD</a></li>
+            <li class="nav-item"><a href="#" class="nav-link" data-action="profile">PROFILE</a></li>
+            <li class="nav-item"><a href="#" class="nav-link" data-action="settings">SETTINGS</a></li>
+          </ul>
+        </nav>
+
+        <div class="sidebar-divider"></div>
+
+        <div class="sidebar-manifesto">
+          SAME<br>
+          PLAYERS.<br>
+          DIFFERENT<br>
+          CARDS.<br>
+          SAME<br>
+          <span class="text-red">CHAOS.</span>
+        </div>
+      </div>
+
+      <div>
+        <div class="sidebar-photo-card">
+          <img src="./assets/arch_underpass.jpg" alt="Underpass brutalist concrete architecture" loading="lazy">
+          <div class="sidebar-photo-overlay">
+            <h4>PLAY<br>ANYTIME.<br>ANYONE.<br>ANYWHERE.</h4>
+            <hr>
+          </div>
+        </div>
+
+        <footer class="sidebar-footer">
+          &copy; 2026 NULL. ALL RIGHTS RESERVED.
+        </footer>
+      </div>
+    </aside>
+
+    <!-- ==================== MAIN WRAPPER ==================== -->
+    <main class="main-wrapper">
+
+      <!-- Top Utility Bar -->
+      <section class="top-utility-bar">
+        <div class="utility-left-text">
+          A CARD GAME FOR EVERYONE.
+        </div>
+        <div class="utility-center-links">
+          <a href="https://discord.com" target="_blank" rel="noopener">DISCORD</a>
+          <span>|</span>
+          <a href="https://github.com/0xSHARON/null" target="_blank" rel="noopener">GITHUB</a>
+          <span>|</span>
+          <a href="mailto:support@0xsharon.dev">SUPPORT</a>
+        </div>
+        <button id="btn-play-top" class="btn-play-top">
+          PLAY NOW &rarr;
+        </button>
+      </section>
+
+      <!-- Giant Hero Title Bar -->
+      <section class="hero-header-banner">
+        <div class="hero-col-title">
+          <div class="hero-main-title">
+            NULL<span class="hero-copyright">&copy;</span>
+          </div>
+          <div class="hero-subtitle">
+            JUST ONE MORE ROUND.
+          </div>
+        </div>
+
+        <div class="hero-col-chaos">
+          SAME<br>
+          NUMBERS.<br>
+          DIFFERENT<br>
+          PEOPLE.<br>
+          SAME<br>
+          <span class="text-red">&nbsp;CHAOS.</span>
+        </div>
+
+        <div class="hero-col-photo">
+          <img src="./assets/arch_concrete.jpg" alt="Brutalist concrete geometry" loading="lazy">
+          <div class="hero-col-photo-text">
+            GOOD<br>CARDS<br>BETTER<br>FRIENDS
+          </div>
+        </div>
+      </section>
+
+      <!-- Content Subtabs Navigation -->
+      <nav class="content-subtabs-bar">
+        <button class="tab-btn active" data-target="tab-cards">THE CARDS</button>
+        <button class="tab-btn" data-target="tab-how-to-play">HOW TO PLAY</button>
+        <button class="tab-btn" data-target="tab-game-modes">GAME MODES</button>
+        <button class="tab-btn" data-target="tab-about">ABOUT</button>
+      </nav>
+
+      <!-- Body Content Split: Center Deck/Panel + Right Sidebar -->
+      <div class="body-split-grid">
+
+        <!-- ==================== TAB 1: THE CARDS (DEFAULT) ==================== -->
+        <section id="tab-cards" class="tab-content-panel active center-deck-section">
+          <div class="deck-header-row">
+            <div class="deck-headline-group">
+              <h2>THE DECK</h2>
+              <p>CLASSIC. CLEAN. CHAOTIC.</p>
+            </div>
+            <div class="deck-stats-group">
+              <div>108 CARDS</div>
+              <div>4 COLOURS</div>
+              <div class="text-red">1 MORE REASON TO PLAY.</div>
+            </div>
+          </div>
+
+          <div class="deck-subhead-title">NUMBER CARDS (0 - 9)</div>
+          <div id="number-cards-grid" class="cards-matrix-container">
+            <!-- Dynamically populated 4 color rows: Red, Yellow, Green, Blue -->
+          </div>
+
+          <div class="deck-subhead-title" style="margin-top: 24px;">ACTION CARDS</div>
+          <div id="action-cards-grid" class="action-cards-row">
+            <!-- Dynamically populated: SKIP, REVERSE, +2, WILD, WILD +4, NULL -->
+          </div>
+        </section>
+
+        <!-- ==================== TAB 2: HOW TO PLAY ==================== -->
+        <section id="tab-how-to-play" class="tab-content-panel brutalist-info-panel">
+          <h2>HOW TO PLAY NULL</h2>
+          <p class="font-mono" style="color: var(--text-dim); letter-spacing: 0.15em;">STANDARD UNO PROTOCOL WITH A SYSTEM PURGE TWIST.</p>
+
+          <div class="brutalist-grid-boxes">
+            <div class="brutalist-box">
+              <h3>01. THE OBJECTIVE</h3>
+              <p>Deallocate your entire hand before your opponents. Match the active discard pile by color or digit. Dump pointers until your register reaches zero.</p>
+            </div>
+            <div class="brutalist-box">
+              <h3>02. ACTION CARDS</h3>
+              <p>Deploy <strong>SKIP</strong> to suppress turns, <strong>REVERSE</strong> to invert direction, and <strong>+2</strong> to flood opponent registers with penalty draws.</p>
+            </div>
+            <div class="brutalist-box">
+              <h3>03. WILD MODIFIERS</h3>
+              <p>Deploy <strong>WILD</strong> to reassign active color. Unleash <strong>WILD +4</strong> to force draw penalties while hijacking the color cycle.</p>
+            </div>
+            <div class="brutalist-box">
+              <h3>04. THE SIGNATURE 'NULL' CARD</h3>
+              <p>A fatal deallocation event. Can be played anytime to wipe the active penalty buffer clean and reset the entire stack to neutral.</p>
+            </div>
+            <div class="brutalist-box">
+              <h3>05. CALLING NULL!</h3>
+              <p>When you have only 1 card remaining in your hand, you MUST hit <strong>CALL NULL!</strong> before ending your turn. If caught, suffer a +2 card penalty!</p>
+            </div>
+            <div class="brutalist-box">
+              <h3>06. VICTORY CONDITIONS</h3>
+              <p>The first player to play their final card triggers a <strong>SYSTEM PURGE</strong> and wins the round. Opponents tally score points based on card weight.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== TAB 3: GAME MODES ==================== -->
+        <section id="tab-game-modes" class="tab-content-panel brutalist-info-panel">
+          <h2>GAME MODES</h2>
+          <p class="font-mono" style="color: var(--text-dim); letter-spacing: 0.15em;">MULTIPLE TRAVERSAL PROTOCOLS READY FOR EXECUTION.</p>
+
+          <div class="brutalist-grid-boxes">
+            <div class="brutalist-box">
+              <h3>SOLO VS BOTS</h3>
+              <p>Face off against Bot-Alpha, Bot-Beta, and Bot-Omega. Fast-paced, offline-ready, and unforgiving AI opponents.</p>
+              <button class="btn-arena-close" style="margin-top: 14px;" onclick="openArena()">LAUNCH SOLO MATCH</button>
+            </div>
+            <div class="brutalist-box">
+              <h3>DISCORD EMBED</h3>
+              <p>Play directly within Discord voice channels as an interactive embedded activity. Full party integration.</p>
+              <button class="btn-discord-play" style="margin-top: 14px;" onclick="openArena()">CONNECT DISCORD</button>
+            </div>
+            <div class="brutalist-box">
+              <h3>PRIVATE P2P LOBBY</h3>
+              <p>Generate a direct WebRTC room link. No account creation, no tracking, zero telemetry. Pure peer-to-peer chaos.</p>
+              <button class="btn-lobby-play" style="margin-top: 14px;" onclick="openArena()">CREATE ROOM</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== TAB 4: ABOUT ==================== -->
+        <section id="tab-about" class="tab-content-panel brutalist-info-panel">
+          <h2>THE NULL MANIFESTO</h2>
+          <p class="font-mono" style="color: var(--text-dim); letter-spacing: 0.15em;">ARCHITECTURAL SIMPLICITY. RAW FUNCTION. MAXIMUM CONFLICT.</p>
+
+          <div class="brutalist-grid-boxes">
+            <div class="brutalist-box">
+              <h3>RAW AESTHETICS</h3>
+              <p>Stripped of modern corporate gradients and soft pastel roundedness. NULL celebrates heavy lines, high contrast, monochrome architectural photography, and raw mechanical response.</p>
+            </div>
+            <div class="brutalist-box">
+              <h3>ZERO OVERHEAD</h3>
+              <p>No 200MB framework bundles. Built entirely with vanilla JavaScript, CSS custom properties, and procedural Web Audio synthesis for instantaneous interaction.</p>
+            </div>
+            <div class="brutalist-box">
+              <h3>COMMUNITY DRIVEN</h3>
+              <p>Free and open source. Hosted permanently on GitHub Pages at <strong>0xsharon.github.io/null</strong>.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== RIGHT SIDEBAR ==================== -->
+        <aside class="sidebar-right">
+          <div class="sidebar-right-header">
+            <span>SCROLL TO EXPLORE</span>
+            <span>&larr; &rarr;</span>
+          </div>
+
+          <!-- Play Now Widget -->
+          <div class="play-now-box">
+            <h3>PLAY NOW</h3>
+            <p>NO DOWNLOADS. JUST VIBES.</p>
+            <button id="btn-play-discord" class="btn-discord-play">
+              <svg width="18" height="14" viewBox="0 0 127.14 96.36" fill="currentColor">
+                <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1,105.25,105.25,0,0,0,32.19-16.14c2.64-27.38-4.51-51.11-18.9-72.25ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,45.91,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,45.91,96.12,53,91.08,65.69,84.69,65.69Z"/>
+              </svg>
+              PLAY ON DISCORD
+            </button>
+            <button id="btn-create-lobby" class="btn-lobby-play">
+              CREATE PRIVATE LOBBY
+            </button>
+            <a href="#" class="play-how-to-link" onclick="activateTab('tab-how-to-play')">
+              HOW TO PLAY &rarr;
+            </a>
+          </div>
+
+          <!-- Featured Card Widget -->
+          <div class="featured-card-section">
+            <div class="featured-section-title">FEATURED CARD</div>
+            <div class="featured-card-display-row">
+              <div id="featured-card-target" class="featured-card-wrapper">
+                <!-- Dynamically updated by inspector -->
+              </div>
+              <div class="featured-card-info">
+                <div id="featured-card-title" class="featured-card-name">WILD</div>
+                <hr>
+                <div id="featured-card-desc" class="featured-card-desc">
+                  PLAY ANY COLOUR. CHANGE THE GAME.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Stadium Architecture Widget -->
+          <div class="sidebar-stadium-card">
+            <img src="./assets/arch_stadium.jpg" alt="Curving brutalist stadium tiers" loading="lazy">
+            <div class="sidebar-stadium-overlay">
+              <h4>MORE<br>THAN<br>A GAME.</h4>
+              <hr>
+            </div>
+          </div>
+        </aside>
+
+      </div>
+    </main>
+
+  </div>
+
+  <!-- ========================================================
+       PLAYABLE UNO ARENA MODAL OVERLAY
+       ======================================================== -->
+  <div id="game-arena-modal" class="game-arena-overlay">
+    <!-- Arena Header -->
+    <header class="arena-header-bar">
+      <div class="arena-title-group">
+        <div class="arena-logo">NULL</div>
+        <div id="arena-dir-badge" class="arena-direction-badge">TRAVERSAL: ↻ CLOCKWISE</div>
+      </div>
+      <div id="arena-ticker" class="arena-ticker-status">
+        MATCH INITIALIZED. WAITING FOR PLAYER MOVE.
+      </div>
+      <div class="arena-controls-group">
+        <button id="btn-arena-mute" class="btn-arena-util">AUDIO: ON</button>
+        <button id="btn-close-arena" class="btn-arena-close">EXIT ARENA</button>
+      </div>
+    </header>
+
+    <!-- Table Surface -->
+    <div class="arena-table-surface">
+      <!-- Bot Seat Top (Bot-Beta) -->
+      <div id="bot-seat-2" class="bot-seat bot-seat-top">
+        <div class="bot-avatar-card">
+          <div class="bot-name">BOT-BETA</div>
+          <div class="bot-card-count">7 CARDS</div>
+        </div>
+        <div class="bot-cards-fan"></div>
+      </div>
+
+      <!-- Bot Seat Left (Bot-Alpha) -->
+      <div id="bot-seat-1" class="bot-seat bot-seat-left">
+        <div class="bot-avatar-card">
+          <div class="bot-name">BOT-ALPHA</div>
+          <div class="bot-card-count">7 CARDS</div>
+        </div>
+        <div class="bot-cards-fan"></div>
+      </div>
+
+      <!-- Bot Seat Right (Bot-Omega) -->
+      <div id="bot-seat-3" class="bot-seat bot-seat-right">
+        <div class="bot-avatar-card">
+          <div class="bot-name">BOT-OMEGA</div>
+          <div class="bot-card-count">7 CARDS</div>
+        </div>
+        <div class="bot-cards-fan"></div>
+      </div>
+
+      <!-- Center Deck Piles -->
+      <div class="table-center-area">
+        <div class="piles-holder">
+          <!-- Draw Pile -->
+          <div id="arena-draw-pile" class="draw-deck-pile" title="Click to Draw Card">
+            <div class="deck-shadow-card"></div>
+            <div class="deck-top-card">
+              <span class="deck-draw-label">DRAW</span>
+              <span id="deck-count-text" class="deck-count-text">108 CARDS</span>
+            </div>
+          </div>
+
+          <!-- Discard Pile -->
+          <div id="arena-discard-pile" class="discard-deck-pile">
+            <!-- Active top card rendered here -->
+          </div>
+        </div>
+
+        <!-- Active Color Indicator -->
+        <div class="active-color-indicator">
+          <span id="active-color-swatch" class="active-color-swatch"></span>
+          <span id="active-color-label" class="active-color-label">COLOR: RED</span>
+        </div>
+      </div>
+
+      <!-- Bottom Human Player Hand -->
+      <div class="human-player-section">
+        <div class="player-action-toolbar">
+          <button id="btn-call-null" class="btn-call-null">CALL NULL!</button>
+        </div>
+        <div id="player-cards-hand" class="player-cards-hand">
+          <!-- Dynamically populated human player hand -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Wild Color Picker Modal -->
+    <div id="color-picker-modal" class="color-picker-dialog">
+      <div class="color-picker-title">SELECT ACTIVE COLOR</div>
+      <div class="color-picker-grid">
+        <button class="color-picker-btn pick-red" data-color="red" title="Red"></button>
+        <button class="color-picker-btn pick-yellow" data-color="yellow" title="Yellow"></button>
+        <button class="color-picker-btn pick-green" data-color="green" title="Green"></button>
+        <button class="color-picker-btn pick-blue" data-color="blue" title="Blue"></button>
+      </div>
+    </div>
+
+    <!-- Game Over Modal -->
+    <div id="gameover-modal" class="gameover-dialog">
+      <div id="gameover-winner-title" class="gameover-title">SYSTEM PURGED</div>
+      <p id="gameover-winner-desc" class="gameover-desc">A player has deallocated their hand to null.</p>
+      <button id="btn-restart-game" class="btn-restart-round">PLAY NEXT ROUND</button>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="./js/cards-data.js"></script>
+  <script src="./js/audio.js"></script>
+  <script src="./js/game-engine.js"></script>
+  <script src="./js/app.js"></script>
+</body>
+</html>
