@@ -2,13 +2,164 @@
  * NULL Card Game - Main Portal & Arena Controller
  */
 
+/**
+ * THEME SPRITE GRID DATA
+ * Each poster image is 1320×880 (landscape).
+ * Number card grid:
+ *   - Header area: top 132px (15%)
+ *   - Card rows start y≈132, each row≈130px tall
+ *   - Left label gutter ≈80px, each card ≈112px wide, 10 cards
+ *   - Colour order: red(row0), yellow(row1), green(row2), blue(row3)
+ * Action cards row starts y≈660, 6 cards, each ≈120px wide, offset x≈140
+ */
+const SPRITE = {
+  // image native size
+  W: 1320, H: 880,
+  // number card area
+  cardX: 80, cardY: 132, cardW: 114, cardH: 128,
+  // colour row order in poster
+  colorRow: { red: 0, yellow: 1, green: 2, blue: 3 },
+  // action card row
+  actionY: 660, actionX: 140, actionW: 128, actionH: 168,
+  // action card column order: skip, reverse, draw2, wild, wild4, null
+  actionCol: { skip: 0, reverse: 1, draw2: 2, wild: 3, wild4: 4, null: 5 }
+};
+
+const THEMES = {
+  default:   { label: 'NULL — DEFAULT EDITION',   file: null,                     accent: '#ff3b30' },
+  pokemon:   { label: 'NULL — POKÉMON EDITION',    file: './themes/pokemon.png',   accent: '#ffd60a' },
+  naruto:    { label: 'NULL — NARUTO EDITION',     file: './themes/naruto.png',    accent: '#ff6b00' },
+  minecraft: { label: 'NULL — MINECRAFT EDITION',  file: './themes/minecraft.png', accent: '#3c7a34' },
+  f1:        { label: 'NULL — FORMULA 1 EDITION',  file: './themes/f1.png',        accent: '#e8002d' },
+  football:  { label: 'NULL — FOOTBALL EDITION',   file: './themes/football.png',  accent: '#1e8449' },
+};
+
+let activeTheme = 'default';
+
 document.addEventListener('DOMContentLoaded', () => {
   // Initialize UI components
   renderDeckExplorer();
   initTabNavigation();
   initFeaturedCardInspector();
+  initThemeSwitcher();
   initGameArena();
 });
+
+/* ========================================================
+   THEME SWITCHER
+   ======================================================== */
+function initThemeSwitcher() {
+  const pills = document.querySelectorAll('.theme-pill');
+  pills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      const theme = pill.dataset.theme;
+      if (theme === activeTheme) return;
+      SFX.playClick();
+      setTheme(theme);
+    });
+  });
+
+  // Click poster to open fullscreen/lightbox
+  const posterImg = document.getElementById('themed-poster-img');
+  if (posterImg) {
+    posterImg.addEventListener('click', () => {
+      if (activeTheme !== 'default') {
+        window.open(THEMES[activeTheme].file, '_blank');
+      }
+    });
+  }
+}
+
+function setTheme(theme) {
+  activeTheme = theme;
+  const t = THEMES[theme];
+
+  // Update pill active state
+  document.querySelectorAll('.theme-pill').forEach(p => {
+    p.classList.toggle('active', p.dataset.theme === theme);
+  });
+
+  // Apply theme to body for CSS-driven card back texture + accent colour
+  document.body.dataset.theme = theme;
+  document.documentElement.style.setProperty(
+    '--theme-card-back',
+    t.file ? `url('${t.file}')` : 'none'
+  );
+  document.documentElement.style.setProperty(
+    '--theme-accent', t.accent
+  );
+
+  const classicView  = document.getElementById('classic-deck-view');
+  const themedView   = document.getElementById('themed-deck-view');
+  const posterImg    = document.getElementById('themed-poster-img');
+  const posterLabel  = document.getElementById('themed-poster-label');
+  const deckHeadline = document.getElementById('deck-headline-text');
+  const deckSubtitle = document.getElementById('deck-subtitle-text');
+
+  if (theme === 'default') {
+    classicView.style.display = '';
+    themedView.style.display  = 'none';
+    if (deckHeadline) deckHeadline.textContent = 'THE DECK';
+    if (deckSubtitle) deckSubtitle.textContent = 'CLASSIC. CLEAN. CHAOTIC.';
+  } else {
+    classicView.style.display = 'none';
+    themedView.style.display  = '';
+    if (posterImg)   { posterImg.src = t.file; posterImg.alt = t.label; }
+    if (posterLabel) posterLabel.textContent = t.label;
+    if (deckHeadline) deckHeadline.textContent = 'THE DECK — ' + theme.toUpperCase();
+    if (deckSubtitle) deckSubtitle.textContent = t.label;
+  }
+
+  // Re-render arena hand cards if game is active (refreshes sprite art)
+  if (activeGame && !activeGame.gameOver) {
+    renderArenaState(activeGame.getState());
+  }
+}
+
+/**
+ * Return CSS background sprite properties for a card in the active theme.
+ * Returns null when theme is 'default' (use normal CSS colour rendering).
+ */
+function getThemeSpriteBg(card) {
+  if (activeTheme === 'default') return null;
+  const file = THEMES[activeTheme].file;
+  if (!file) return null;
+
+  const S = SPRITE;
+  let sx, sy, sw = S.cardW, sh = S.cardH;
+
+  if (card.type === 'number') {
+    const col = parseInt(card.value, 10);
+    const row = S.colorRow[card.color] ?? 0;
+    sx = S.cardX + col * S.cardW;
+    sy = S.cardY + row * S.cardH;
+  } else {
+    // action / wild / null card
+    const key = card.value === 'draw2' ? 'draw2'
+              : card.value === 'null'  ? 'null'
+              : card.value; // skip, reverse, wild, wild4
+    const col = S.actionCol[key] ?? 0;
+    sx = S.actionX + col * S.actionW;
+    sy = S.actionY;
+    sw = S.actionW;
+    sh = S.actionH;
+  }
+
+  // background-position as percentage of sprite sheet
+  // scaled so card element fills exactly one sprite cell
+  const scaleX = 100 / (sw / S.W * 100) * 100;
+  const scaleY = 100 / (sh / S.H * 100) * 100;
+  const posX   = (sx / (S.W - sw)) * 100;
+  const posY   = (sy / (S.H - sh)) * 100;
+
+  return {
+    backgroundImage:    `url('${file}')`,
+    backgroundSize:     `${scaleX.toFixed(2)}% ${scaleY.toFixed(2)}%`,
+    backgroundPosition: `${posX.toFixed(2)}% ${posY.toFixed(2)}%`,
+    backgroundRepeat:   'no-repeat',
+  };
+}
+
 
 /* ========================================================
    1. DECK EXPLORER GENERATOR
@@ -76,7 +227,9 @@ function renderDeckExplorer() {
 }
 
 /**
- * Creates an HTML Uno card matching the exact brutalist reference design
+ * Creates an HTML Uno card matching the exact brutalist reference design.
+ * When a theme is active the card's interior is replaced with the sprite
+ * artwork cropped from the themed poster image.
  */
 function createCardElement(card) {
   const cardDiv = document.createElement('div');
@@ -84,6 +237,7 @@ function createCardElement(card) {
   cardDiv.dataset.type = card.type || 'number';
   cardDiv.dataset.value = card.value || card.id;
 
+  // ── Build inner markup (default brutalist text) ──────────────────────
   if (card.type === 'number') {
     cardDiv.innerHTML = `
       <div class="card-corner card-corner-tl">${card.value}</div>
@@ -146,8 +300,19 @@ function createCardElement(card) {
     `;
   }
 
+  // ── Sprite overlay when a theme is active ───────────────────────────
+  const spriteBg = getThemeSpriteBg(card);
+  if (spriteBg) {
+    const overlay = document.createElement('div');
+    overlay.className = 'card-theme-sprite-overlay';
+    Object.assign(overlay.style, spriteBg);
+    cardDiv.appendChild(overlay);
+    cardDiv.classList.add('has-theme-sprite');
+  }
+
   return cardDiv;
 }
+
 
 /* ========================================================
    2. FEATURED CARD INSPECTOR

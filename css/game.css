@@ -478,3 +478,89 @@
   font-weight: 900;
   letter-spacing: 0.08em;
 }
+
+/* ========================================================
+   THEMED CARD SYSTEM
+   ======================================================== */
+
+/* CSS custom props injected by JS via setTheme() */
+:root {
+  --theme-card-back: none;
+  --theme-accent: #ff3b30;
+}
+
+/* ── Sprite overlay layer ── */
+.card-theme-sprite-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 2;
+  /* background-image / position / size set inline by JS */
+}
+
+/* When sprite overlay is present, dim the text layer underneath */
+.uno-card.has-theme-sprite {
+  overflow: hidden;
+}
+
+.uno-card.has-theme-sprite .card-corner,
+.uno-card.has-theme-sprite .card-center-oval,
+.uno-card.has-theme-sprite .action-card-name-top,
+.uno-card.has-theme-sprite .action-card-name-bot,
+.uno-card.has-theme-sprite .wild-pie-badge,
+.uno-card.has-theme-sprite .wild-fan-graphic,
+.uno-card.has-theme-sprite .null-cross-symbol {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ── Themed card back: draw pile ── */
+[data-theme]:not([data-theme="default"]) .deck-top-card {
+  background: var(--theme-card-back) center / cover no-repeat !important;
+  border-color: var(--theme-accent) !important;
+}
+
+[data-theme]:not([data-theme="default"]) .deck-top-card .deck-draw-label,
+[data-theme]:not([data-theme="default"]) .deck-top-card .deck-count-text {
+  text-shadow: 0 1px 6px rgba(0,0,0,0.9);
+  position: relative;
+  z-index: 3;
+}
+
+/* Themed overlay tint on draw pile (to keep text readable) */
+[data-theme]:not([data-theme="default"]) .deck-top-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: rgba(0,0,0,0.45);
+  z-index: 2;
+}
+
+/* ── Themed card back: bot hand mini cards ── */
+[data-theme]:not([data-theme="default"]) .card-back-mini {
+  background: var(--theme-card-back) center / cover no-repeat;
+  border-color: var(--theme-accent);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.7);
+}
+
+/* ── Theme accent colour applied to arena UI ── */
+[data-theme]:not([data-theme="default"]) .arena-status-bar {
+  border-bottom-color: var(--theme-accent);
+}
+
+[data-theme]:not([data-theme="default"]) .player-hand-area {
+  border-top-color: var(--theme-accent);
+}
+
+[data-theme]:not([data-theme="default"]) .deck-shadow-card {
+  border-color: var(--theme-accent);
+  background: color-mix(in srgb, var(--theme-accent) 15%, #111);
+}
+
+/* Active theme pill inherits theme accent */
+[data-theme]:not([data-theme="default"]) .theme-pill.active {
+  background: var(--theme-accent);
+  border-color: var(--theme-accent);
+}

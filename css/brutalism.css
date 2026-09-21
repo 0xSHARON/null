@@ -955,3 +955,131 @@ a {
     font-size: 4.8rem;
   }
 }
+
+/* ========================================================
+   THEME SWITCHER
+   ======================================================== */
+
+.theme-switcher-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 0 20px;
+  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+
+.theme-switcher-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+  flex-shrink: 0;
+}
+
+.theme-switcher-pills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.theme-pill {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 14px;
+  background: transparent;
+  border: 1.5px solid #333338;
+  color: var(--text-dim);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: all 0.12s;
+  box-shadow: none;
+}
+
+.theme-pill:hover {
+  border-color: #ffffff;
+  color: #ffffff;
+  background: #1a1a20;
+}
+
+.theme-pill.active {
+  border-color: var(--red);
+  color: #ffffff;
+  background: var(--red);
+  box-shadow: 3px 3px 0px #000;
+}
+
+.theme-pill:active {
+  transform: translate(2px, 2px);
+  box-shadow: none !important;
+}
+
+/* Colour swatches for each theme pill */
+.theme-pill-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,0.3);
+  flex-shrink: 0;
+}
+
+.theme-swatch-default  { background: linear-gradient(135deg, #ff3b30 0%, #ffd60a 50%, #30d158 75%, #0a84ff 100%); }
+.theme-swatch-pokemon  { background: linear-gradient(135deg, #ffd60a 0%, #e63946 100%); }
+.theme-swatch-naruto   { background: linear-gradient(135deg, #ff6b00 0%, #1a1a2e 100%); }
+.theme-swatch-minecraft{ background: linear-gradient(135deg, #3c7a34 0%, #8b5e3c 100%); }
+.theme-swatch-f1       { background: linear-gradient(135deg, #e8002d 0%, #15151e 100%); }
+.theme-swatch-football { background: linear-gradient(135deg, #1e8449 0%, #222 100%); }
+
+/* ========================================================
+   THEMED DECK POSTER VIEW
+   ======================================================== */
+.themed-poster-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.themed-poster-img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border: 2px solid var(--border-subtle);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.8);
+  transition: box-shadow 0.2s;
+  cursor: zoom-in;
+}
+
+.themed-poster-img:hover {
+  box-shadow: 0 12px 48px rgba(0,0,0,1), 0 0 0 2px var(--red);
+}
+
+.themed-poster-caption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.themed-poster-label-text {
+  font-size: 1.1rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  color: var(--red);
+  text-transform: uppercase;
+}
+
+.themed-poster-hint {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}

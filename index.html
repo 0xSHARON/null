@@ -140,8 +140,8 @@
         <section id="tab-cards" class="tab-content-panel active center-deck-section">
           <div class="deck-header-row">
             <div class="deck-headline-group">
-              <h2>THE DECK</h2>
-              <p>CLASSIC. CLEAN. CHAOTIC.</p>
+              <h2 id="deck-headline-text">THE DECK</h2>
+              <p id="deck-subtitle-text">CLASSIC. CLEAN. CHAOTIC.</p>
             </div>
             <div class="deck-stats-group">
               <div>108 CARDS</div>
@@ -150,14 +150,58 @@
             </div>
           </div>
 
-          <div class="deck-subhead-title">NUMBER CARDS (0 - 9)</div>
-          <div id="number-cards-grid" class="cards-matrix-container">
-            <!-- Dynamically populated 4 color rows: Red, Yellow, Green, Blue -->
+          <!-- ── THEME SWITCHER BAR ── -->
+          <div class="theme-switcher-bar">
+            <span class="theme-switcher-label">THEME</span>
+            <div class="theme-switcher-pills">
+              <button class="theme-pill active" data-theme="default" title="Classic NULL">
+                <span class="theme-pill-swatch theme-swatch-default"></span>
+                DEFAULT
+              </button>
+              <button class="theme-pill" data-theme="pokemon" title="Pokémon Edition">
+                <span class="theme-pill-swatch theme-swatch-pokemon"></span>
+                POKÉMON
+              </button>
+              <button class="theme-pill" data-theme="naruto" title="Naruto Edition">
+                <span class="theme-pill-swatch theme-swatch-naruto"></span>
+                NARUTO
+              </button>
+              <button class="theme-pill" data-theme="minecraft" title="Minecraft Edition">
+                <span class="theme-pill-swatch theme-swatch-minecraft"></span>
+                MINECRAFT
+              </button>
+              <button class="theme-pill" data-theme="f1" title="Formula 1 Edition">
+                <span class="theme-pill-swatch theme-swatch-f1"></span>
+                F1
+              </button>
+              <button class="theme-pill" data-theme="football" title="Football Edition">
+                <span class="theme-pill-swatch theme-swatch-football"></span>
+                FOOTBALL
+              </button>
+            </div>
           </div>
 
-          <div class="deck-subhead-title" style="margin-top: 24px;">ACTION CARDS</div>
-          <div id="action-cards-grid" class="action-cards-row">
-            <!-- Dynamically populated: SKIP, REVERSE, +2, WILD, WILD +4, NULL -->
+          <!-- ── CLASSIC CARD GRID (default view) ── -->
+          <div id="classic-deck-view">
+            <div class="deck-subhead-title">NUMBER CARDS (0 - 9)</div>
+            <div id="number-cards-grid" class="cards-matrix-container">
+              <!-- Dynamically populated 4 color rows: Red, Yellow, Green, Blue -->
+            </div>
+            <div class="deck-subhead-title" style="margin-top: 24px;">ACTION CARDS</div>
+            <div id="action-cards-grid" class="action-cards-row">
+              <!-- Dynamically populated: SKIP, REVERSE, +2, WILD, WILD +4, NULL -->
+            </div>
+          </div>
+
+          <!-- ── THEMED DECK POSTER VIEW ── -->
+          <div id="themed-deck-view" style="display:none;">
+            <div class="themed-poster-wrapper">
+              <img id="themed-poster-img" src="" alt="Themed deck poster" class="themed-poster-img">
+              <div class="themed-poster-caption">
+                <span id="themed-poster-label" class="themed-poster-label-text"></span>
+                <span class="themed-poster-hint">← HOVER OVER THE DECK POSTER TO EXPLORE · CLICK THEME PILLS TO SWITCH</span>
+              </div>
+            </div>
           </div>
         </section>
 
