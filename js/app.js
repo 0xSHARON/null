@@ -2,39 +2,56 @@
  * NULL Card Game - Main Portal & Arena Controller
  */
 
-/**
- * THEME SPRITE GRID DATA
- * Each poster image is 1320×880 (landscape).
- * Number card grid:
- *   - Header area: top 132px (15%)
- *   - Card rows start y≈132, each row≈130px tall
- *   - Left label gutter ≈80px, each card ≈112px wide, 10 cards
- *   - Colour order: red(row0), yellow(row1), green(row2), blue(row3)
- * Action cards row starts y≈660, 6 cards, each ≈120px wide, offset x≈140
- */
-const SPRITE = {
-  // image native size
-  W: 1320, H: 880,
-  // number card area
-  cardX: 80, cardY: 132, cardW: 114, cardH: 128,
-  // colour row order in poster
-  colorRow: { red: 0, yellow: 1, green: 2, blue: 3 },
-  // action card row
-  actionY: 660, actionX: 140, actionW: 128, actionH: 168,
-  // action card column order: skip, reverse, draw2, wild, wild4, null
-  actionCol: { skip: 0, reverse: 1, draw2: 2, wild: 3, wild4: 4, null: 5 }
-};
-
 const THEMES = {
-  default:   { label: 'NULL — DEFAULT EDITION',   file: null,                     accent: '#ff3b30' },
-  pokemon:   { label: 'NULL — POKÉMON EDITION',    file: './themes/pokemon.png',   accent: '#ffd60a' },
-  naruto:    { label: 'NULL — NARUTO EDITION',     file: './themes/naruto.png',    accent: '#ff6b00' },
-  minecraft: { label: 'NULL — MINECRAFT EDITION',  file: './themes/minecraft.png', accent: '#3c7a34' },
-  f1:        { label: 'NULL — FORMULA 1 EDITION',  file: './themes/f1.png',        accent: '#e8002d' },
-  football:  { label: 'NULL — FOOTBALL EDITION',   file: './themes/football.png',  accent: '#1e8449' },
+  default:   { label: 'NULL — DEFAULT EDITION',   folder: './themes/default',   accent: '#ff3b30', preview: './themes/default/PREVIEW_NUMBERS.png' },
+  pokemon:   { label: 'NULL — POKÉMON EDITION',    folder: './themes/pokemon',   accent: '#ffd60a', preview: './themes/pokemon/PREVIEW_NUMBERS.png' },
+  naruto:    { label: 'NULL — NARUTO EDITION',     folder: './themes/naruto',    accent: '#ff6b00', preview: './themes/naruto/PREVIEW_NUMBERS.png' },
+  minecraft: { label: 'NULL — MINECRAFT EDITION',  folder: './themes/minecraft', accent: '#3c7a34', preview: './themes/minecraft/PREVIEW_NUMBERS.png' },
+  f1:        { label: 'NULL — FORMULA 1 EDITION',  folder: './themes/f1',        accent: '#e8002d', preview: './themes/f1/PREVIEW_NUMBERS.png' },
+  football:  { label: 'NULL — FOOTBALL EDITION',   folder: './themes/football',  accent: '#1e8449', preview: './themes/football/PREVIEW_NUMBERS.png' },
 };
 
 let activeTheme = 'default';
+
+/**
+ * Returns the URL of the themed card image for a given card object.
+ * File layout: themes/{theme}/{color}/{color}_{value}.png
+ *              themes/{theme}/actions/{action_id}.png
+ * Action file name mapping:
+ *   draw2    → draw_2.png
+ *   wild4    → wild_draw_4.png
+ *   skip     → skip.png
+ *   reverse  → reverse.png
+ *   wild     → wild.png
+ *   null     → null.png
+ */
+function getThemeCardUrl(card) {
+  const t = THEMES[activeTheme];
+  if (!t) return null;
+
+  const base = t.folder;
+
+  if (card.type === 'number') {
+    // e.g. ./themes/pokemon/red/red_5.png
+    return `${base}/${card.color}/${card.color}_${card.value}.png`;
+  }
+
+  // Action / wild / null
+  const id = card.id || card.value;
+  const ACTION_FILE = {
+    skip:    'skip.png',
+    reverse: 'reverse.png',
+    draw2:   'draw_2.png',
+    wild:    'wild.png',
+    wild4:   'wild_draw_4.png',
+    null:    'null.png',
+  };
+  const filename = ACTION_FILE[id];
+  if (!filename) return null;
+  return `${base}/actions/${filename}`;
+}
+
+
 
 document.addEventListener('DOMContentLoaded', () => {
   // Initialize UI components
@@ -63,9 +80,8 @@ function initThemeSwitcher() {
   const posterImg = document.getElementById('themed-poster-img');
   if (posterImg) {
     posterImg.addEventListener('click', () => {
-      if (activeTheme !== 'default') {
-        window.open(THEMES[activeTheme].file, '_blank');
-      }
+      const t = THEMES[activeTheme];
+      if (t && t.preview) window.open(t.preview, '_blank');
     });
   }
 }
@@ -79,15 +95,13 @@ function setTheme(theme) {
     p.classList.toggle('active', p.dataset.theme === theme);
   });
 
-  // Apply theme to body for CSS-driven card back texture + accent colour
+  // Apply theme to body for CSS-driven card back + accent colour
   document.body.dataset.theme = theme;
   document.documentElement.style.setProperty(
     '--theme-card-back',
-    t.file ? `url('${t.file}')` : 'none'
+    t.preview ? `url('${t.preview}')` : 'none'
   );
-  document.documentElement.style.setProperty(
-    '--theme-accent', t.accent
-  );
+  document.documentElement.style.setProperty('--theme-accent', t.accent);
 
   const classicView  = document.getElementById('classic-deck-view');
   const themedView   = document.getElementById('themed-deck-view');
@@ -99,65 +113,25 @@ function setTheme(theme) {
   if (theme === 'default') {
     classicView.style.display = '';
     themedView.style.display  = 'none';
+    // Re-render deck explorer with default theme card art
+    document.getElementById('number-cards-grid').innerHTML = '';
+    document.getElementById('action-cards-grid').innerHTML = '';
+    renderDeckExplorer();
     if (deckHeadline) deckHeadline.textContent = 'THE DECK';
     if (deckSubtitle) deckSubtitle.textContent = 'CLASSIC. CLEAN. CHAOTIC.';
   } else {
     classicView.style.display = 'none';
     themedView.style.display  = '';
-    if (posterImg)   { posterImg.src = t.file; posterImg.alt = t.label; }
+    if (posterImg)   { posterImg.src = t.preview; posterImg.alt = t.label; }
     if (posterLabel) posterLabel.textContent = t.label;
     if (deckHeadline) deckHeadline.textContent = 'THE DECK — ' + theme.toUpperCase();
     if (deckSubtitle) deckSubtitle.textContent = t.label;
   }
 
-  // Re-render arena hand cards if game is active (refreshes sprite art)
-  if (activeGame && !activeGame.gameOver) {
-    renderArenaState(activeGame.getState());
+  // Re-render arena hand cards if game is active (refreshes card art)
+  if (typeof activeGame !== 'undefined' && activeGame && !activeGame.gameOver) {
+    if (typeof renderArenaState === 'function') renderArenaState(activeGame.getState());
   }
-}
-
-/**
- * Return CSS background sprite properties for a card in the active theme.
- * Returns null when theme is 'default' (use normal CSS colour rendering).
- */
-function getThemeSpriteBg(card) {
-  if (activeTheme === 'default') return null;
-  const file = THEMES[activeTheme].file;
-  if (!file) return null;
-
-  const S = SPRITE;
-  let sx, sy, sw = S.cardW, sh = S.cardH;
-
-  if (card.type === 'number') {
-    const col = parseInt(card.value, 10);
-    const row = S.colorRow[card.color] ?? 0;
-    sx = S.cardX + col * S.cardW;
-    sy = S.cardY + row * S.cardH;
-  } else {
-    // action / wild / null card
-    const key = card.value === 'draw2' ? 'draw2'
-              : card.value === 'null'  ? 'null'
-              : card.value; // skip, reverse, wild, wild4
-    const col = S.actionCol[key] ?? 0;
-    sx = S.actionX + col * S.actionW;
-    sy = S.actionY;
-    sw = S.actionW;
-    sh = S.actionH;
-  }
-
-  // background-position as percentage of sprite sheet
-  // scaled so card element fills exactly one sprite cell
-  const scaleX = 100 / (sw / S.W * 100) * 100;
-  const scaleY = 100 / (sh / S.H * 100) * 100;
-  const posX   = (sx / (S.W - sw)) * 100;
-  const posY   = (sy / (S.H - sh)) * 100;
-
-  return {
-    backgroundImage:    `url('${file}')`,
-    backgroundSize:     `${scaleX.toFixed(2)}% ${scaleY.toFixed(2)}%`,
-    backgroundPosition: `${posX.toFixed(2)}% ${posY.toFixed(2)}%`,
-    backgroundRepeat:   'no-repeat',
-  };
 }
 
 
@@ -300,18 +274,22 @@ function createCardElement(card) {
     `;
   }
 
-  // ── Sprite overlay when a theme is active ───────────────────────────
-  const spriteBg = getThemeSpriteBg(card);
-  if (spriteBg) {
+  // ── Direct themed card image overlay ────────────────────────────────
+  const cardUrl = getThemeCardUrl(card);
+  if (cardUrl) {
     const overlay = document.createElement('div');
     overlay.className = 'card-theme-sprite-overlay';
-    Object.assign(overlay.style, spriteBg);
+    overlay.style.backgroundImage    = `url('${cardUrl}')`;
+    overlay.style.backgroundSize     = '100% 100%';
+    overlay.style.backgroundPosition = 'center';
+    overlay.style.backgroundRepeat   = 'no-repeat';
     cardDiv.appendChild(overlay);
     cardDiv.classList.add('has-theme-sprite');
   }
 
   return cardDiv;
 }
+
 
 
 /* ========================================================
